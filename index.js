@@ -17,7 +17,7 @@ if(sourceDir && targetDir) {
 
 function checkFileExistence(dir, fileName) {
   //assume the file exists until proven wrong
-  var result = true;
+  let result = true;
 
   try {
     fs.statSync(path.resolve (dir, fileName));
@@ -72,16 +72,12 @@ function renameFile(name) {
   let alteredName = removeExtension(name),
       ext = alteredName.extension,
       nameOnly = alteredName.name,
-      num = 0,
+      num = 1,
       numString = '',
       result = '';
 
   while(checkFileExistence(targetDir, nameOnly.concat(numString, '.', ext))) {
-    if(num === 0) {
-      numString = '';
-    } else {
-      numString = ' (' + num.toString () + ')';
-    }
+    numString = ' (' + num.toString () + ')';
 
     num++;
   }
