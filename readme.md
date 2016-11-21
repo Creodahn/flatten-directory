@@ -1,4 +1,4 @@
-* Flatten Directory structure
+# Flatten Directory structure
 
 This script allows you to move all files in a directory structure into a single target directory.
 
