@@ -12,7 +12,10 @@ const args = require('minimist')(process.argv.slice(2)),
 if(sourceDir && targetDir) {
   parseDirectory(sourceDir);
 } else {
-  console.error('Missing a required argument.\n\nMake sure to include both --src and --trg');
+  console.error(
+    'Missing a required argument.',
+    '\n\nMake sure to include both --src and --trg'
+  );
 }
 
 function checkFileExistence(dir, fileName) {
@@ -48,7 +51,9 @@ function parseDirectory(dir) {
           }
         }
 
-        mv(location, path.resolve(targetDir, name), { mkdirp: true }, function(err) {
+        mv(location, path.resolve(targetDir, name), {
+          mkdirp: true
+        }, function(err) {
           if(err) {
             console.error(err);
           }
@@ -72,17 +77,20 @@ function renameFile(name) {
   let alteredName = removeExtension(name),
       ext = alteredName.extension,
       nameOnly = alteredName.name,
+      newName = name,
       num = 1,
       numString = '',
       result = '';
 
-  while(checkFileExistence(targetDir, nameOnly.concat(numString, ext))) {
+  while(checkFileExistence(targetDir, newName)) {
     numString = ' (' + num.toString () + ')';
+
+    newName = nameOnly.concat(numString, ext);
 
     num++;
   }
 
-  return nameOnly.concat(numString, ext);
+  return newName;
 }
 
 function reverse(str) {
