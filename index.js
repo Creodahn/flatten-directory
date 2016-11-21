@@ -1,4 +1,3 @@
-
 const fs = require('fs'),
       mv = require('mv'),
       path = require('path');
@@ -38,17 +37,13 @@ function parseDirectory(dir) {
       let item = list[i],
           location = path.resolve(dir, item);
 
-      log(item);
-
       if(fs.lstatSync(location).isDirectory()) {
         parseDirectory(location);
       } else {
         let name = item;
 
         if(!overwrite) {
-          if(checkFileExistence(targetDir, name)) {
-            name = renameFile(name);
-          }
+          name = renameFile(name);
         }
 
         mv(location, path.resolve(targetDir, name), {
@@ -82,7 +77,7 @@ function renameFile(name) {
       result = '';
 
   while(checkFileExistence(targetDir, newName)) {
-    numString = ' (' + num.toString () + ')';
+    numString = ' ('.concat(num.toString(), ')');
 
     newName = nameOnly.concat(numString, ext);
 
@@ -93,5 +88,5 @@ function renameFile(name) {
 }
 
 function reverse(str) {
-  return str.split ('').reverse ().join ('');
+  return str.split('').reverse().join('');
 }
