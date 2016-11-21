@@ -64,12 +64,11 @@ function parseDirectory(dir) {
 }
 
 function removeExtension(name) {
-  let eman = reverse(name),
-      ext = reverse(eman.substring(0, eman.indexOf('.') + 1));
+  let eman = reverse(name);
 
   return {
     name: reverse(eman.substring(eman.indexOf('.') + 1)),
-    extension: ext
+    extension: reverse(eman.substring(0, eman.indexOf('.') + 1))
   };
 }
 
