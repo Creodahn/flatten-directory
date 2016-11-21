@@ -60,7 +60,7 @@ function parseDirectory(dir) {
 
 function removeExtension(name) {
   let eman = reverse(name),
-      ext = eman.substring(0, eman.indexOf('.'));
+      ext = eman.substring(0, eman.indexOf('.') + 1);
 
   return {
     name: reverse(eman.substring(eman.indexOf('.') + 1)),
@@ -76,13 +76,13 @@ function renameFile(name) {
       numString = '',
       result = '';
 
-  while(checkFileExistence(targetDir, nameOnly.concat(numString, '.', ext))) {
+  while(checkFileExistence(targetDir, nameOnly.concat(numString, ext))) {
     numString = ' (' + num.toString () + ')';
 
     num++;
   }
 
-  return nameOnly.concat(numString, '.', ext);
+  return nameOnly.concat(numString, ext);
 }
 
 function reverse(str) {
