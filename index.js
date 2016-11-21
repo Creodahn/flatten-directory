@@ -3,13 +3,17 @@ const fs = require('fs'),
       mv = require('mv'),
       path = require('path');
 
-const args = process.argv.slice(2),
+const args = require('minimist')(process.argv.slice(2)),
       log = console.log,
-      overwrite = Boolean(args[2]),
-      sourceDir = args[0],
-      targetDir = args[1];
+      overwrite = args.clbr,
+      sourceDir = args.src,
+      targetDir = args.trg;
 
-parseDirectory(sourceDir);
+if(sourceDir && targetDir) {
+  parseDirectory(sourceDir);
+} else {
+  console.error('Missing a required argument.\n\nMake sure to include both --src and --trg');
+}
 
 function checkFileExistence(dir, fileName) {
   //assume the file exists until proven wrong
