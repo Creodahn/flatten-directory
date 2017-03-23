@@ -9,6 +9,7 @@
   "author": "Justin Drew",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.1.2",
     "minimist": "^1.2.0",
     "mv": "^2.1.1"
   }

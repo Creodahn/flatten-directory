@@ -1,9 +1,10 @@
-const fs = require('fs'),
+const colors = require('colors'),
+      fs = require('fs'),
       mv = require('mv'),
       path = require('path');
 
 const args = require('minimist')(process.argv.slice(2)),
-      log = console.log,
+      log_error = require('console').error,
       overwrite = args.clbr,
       sourceDir = args.src,
       targetDir = args.trg;
@@ -11,7 +12,7 @@ const args = require('minimist')(process.argv.slice(2)),
 if(sourceDir && targetDir) {
   parseDirectory(sourceDir);
 } else {
-  console.error(
+  error(
     'Missing a required argument.',
     '\n\nMake sure to include both --src and --trg'
   );
@@ -31,11 +32,15 @@ function checkFileExistence(dir, fileName) {
   return result;
 }
 
+function error(err) {
+  log_error(colors.red(`n${err.toString()}\n`));
+}
+
 function parseDirectory(dir) {
   fs.readdir(dir, function(err, list) {
     for(let i = 0; i < list.length; i++) {
-      let item = list[i],
-          location = path.resolve(dir, item);
+      const item = list[i],
+            location = path.resolve(dir, item);
 
       if(fs.lstatSync(location).isDirectory()) {
         parseDirectory(location);
@@ -50,7 +55,7 @@ function parseDirectory(dir) {
           mkdirp: true
         }, function(err) {
           if(err) {
-            console.error(err);
+            error(err);
           }
         });
       }
@@ -59,7 +64,7 @@ function parseDirectory(dir) {
 }
 
 function removeExtension(name) {
-  let eman = reverse(name);
+  const eman = reverse(name);
 
   return {
     name: reverse(eman.substring(eman.indexOf('.') + 1)),
@@ -68,13 +73,12 @@ function removeExtension(name) {
 }
 
 function renameFile(name) {
-  let alteredName = removeExtension(name),
-      ext = alteredName.extension,
-      nameOnly = alteredName.name,
-      newName = name,
+  const alteredName = removeExtension(name),
+        ext = alteredName.extension,
+        nameOnly = alteredName.name;
+  let newName = name,
       num = 1,
-      numString = '',
-      result = '';
+      numString = '';
 
   while(checkFileExistence(targetDir, newName)) {
     numString = ' ('.concat(num.toString(), ')');
