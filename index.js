@@ -1,21 +1,21 @@
+// node_module requires
 const colors = require('colors'),
       fs = require('fs'),
       mv = require('mv'),
-      path = require('path');
-
-const args = require('minimist')(process.argv.slice(2)),
+      path = require('path'),
+      args = require('minimist')(process.argv.slice(2)),
+      // local constants
       log_error = require('console').error,
       overwrite = args.clbr,
       sourceDir = args.src,
       targetDir = args.trg;
 
-if(sourceDir && targetDir) {
-  parseDirectory(sourceDir);
-} else {
-  error(
-    'Missing a required argument.',
-    '\n\nMake sure to include both --src and --trg'
-  );
+switch(true) {
+  case sourceDir && targetDir:
+    parseDirectory(sourceDir);
+    break;
+  default:
+    error(new Error('Missing a required argument. Make sure to include both --src and --trg'));
 }
 
 function checkFileExistence(dir, fileName) {
@@ -32,8 +32,10 @@ function checkFileExistence(dir, fileName) {
   return result;
 }
 
-function error(err) {
-  log_error(colors.red(`n${err.toString()}\n`));
+function error(...err) {
+  if(err) {
+    log_error(colors.red(`\n${err.toString()}\n`));
+  }
 }
 
 function parseDirectory(dir) {
@@ -47,17 +49,11 @@ function parseDirectory(dir) {
       } else {
         let name = item;
 
-        if(!overwrite) {
-          name = renameFile(name);
-        }
+        name = !overwrite ? renameFile(name) : name;
 
         mv(location, path.resolve(targetDir, name), {
           mkdirp: true
-        }, function(err) {
-          if(err) {
-            error(err);
-          }
-        });
+        }, error(err));
       }
     }
   });
@@ -73,17 +69,12 @@ function removeExtension(name) {
 }
 
 function renameFile(name) {
-  const alteredName = removeExtension(name),
-        ext = alteredName.extension,
-        nameOnly = alteredName.name;
+  const alteredName = removeExtension(name);
   let newName = name,
-      num = 1,
-      numString = '';
+      num = 1;
 
   while(checkFileExistence(targetDir, newName)) {
-    numString = ' ('.concat(num.toString(), ')');
-
-    newName = nameOnly.concat(numString, ext);
+    newName = `${alteredName.name} (${num.toString()})${alteredName.extension}`;
 
     num++;
   }
