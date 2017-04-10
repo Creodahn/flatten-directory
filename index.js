@@ -11,7 +11,7 @@ const colors = require('colors'),
       targetDir = args.trg;
 
 switch(true) {
-  case sourceDir && targetDir:
+  case !!sourceDir && !!targetDir:
     parseDirectory(sourceDir);
     break;
   default:
@@ -53,7 +53,11 @@ function parseDirectory(dir) {
 
         mv(location, path.resolve(targetDir, name), {
           mkdirp: true
-        }, error(err));
+        }, function(err) {
+          if(err) {
+            error(err);
+          }
+        });
       }
     }
   });
