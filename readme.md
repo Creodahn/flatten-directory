@@ -1,5 +1,7 @@
 # Flatten Directory structure
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Creodahn/flatten-directory.svg)](https://greenkeeper.io/)
+
 This script allows you to move all files in a directory structure into a single target directory.
 
 # Installation
